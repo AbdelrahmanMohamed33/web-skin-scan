@@ -30,15 +30,13 @@ const Footer = () => {
         <div>
           <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Browse Disease</h1>
           <nav className=" flex flex-col gap-2">
-            <Link to="services" spy={true} smooth={true} duration={500} className=" hover:text-hoverColor transition-all cursor-pointer">
-              Lab Test
+            <Link to="blogs" spy={true} smooth={true} duration={500} className=" hover:text-hoverColor transition-all cursor-pointer">
+            preventions
             </Link>
-            <Link to="services" spy={true} smooth={true} duration={500} className=" hover:text-hoverColor transition-all cursor-pointer">
-              Health Check
+            <Link to="blogs" spy={true} smooth={true} duration={500} className=" hover:text-hoverColor transition-all cursor-pointer">
+            description
             </Link>
-            <Link to="services" spy={true} smooth={true} duration={500} className=" hover:text-hoverColor transition-all cursor-pointer">
-              Heart Health
-            </Link>
+         
           </nav>
         </div>
         <div className=" w-full md:w-1/4">
