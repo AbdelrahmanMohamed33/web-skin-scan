@@ -107,7 +107,10 @@ const Navbar = () => {
           <NavLink to="/scan" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>Scan</NavLink>
           <NavLink to="/about" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>About Us</NavLink>
           <NavLink to="/blogs" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>Browse Disease</NavLink>
+          <NavLink to="/history" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>History</NavLink>
           <NavLink to="/clinics" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>Clinics</NavLink>
+          <NavLink to="/feedback" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>Feedback</NavLink>
+
           {isDoctor ? (
             <NavLink to="/users" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all cursor-pointer")} onClick={closeMenu}>Users</NavLink>
           ) : (
