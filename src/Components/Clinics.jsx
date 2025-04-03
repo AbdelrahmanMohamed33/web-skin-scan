@@ -44,7 +44,7 @@ const Clinics = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className="bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-900 transition">
+        <button type="submit" className="bg-blue-900 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition">
           Search
         </button>
       </form>
