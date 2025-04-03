@@ -52,7 +52,7 @@ const Clinicdetails = () => {
       </div>
   
       <div className="flex justify-center items-center mt-6">
-        <button className="bg-blue-900 text-white px-5 py-2 rounded-lg hover:bg-blue-800" onClick={() => navigate(`/appointment/${id}`)}>
+        <button className="bg-blue-900 text-white px-5 py-2 rounded-lg hover:bg-blue-800" onClick={() => navigate(`/success`)}>
           Book Appointment
         </button>
       </div>
