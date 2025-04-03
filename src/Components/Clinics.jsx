@@ -67,23 +67,29 @@ const Clinics = () => {
 
 const ClinicCard = ({ clinic, navigate }) => {
   return (
-    <div className="border rounded-xl p-5 shadow-lg flex items-center bg-white hover:shadow-2xl transition">
+    <div className="border rounded-xl p-5 shadow-lg flex flex-wrap items-center bg-white hover:shadow-2xl transition">
       {/* Clickable Image */}
       <img
         src={img}
         alt="Clinic"
         className="w-20 h-20 rounded-full object-cover mr-5 cursor-pointer"
-        onClick={() => navigate(`/clinicdetails/${clinic.id}`)} // Navigate to details page
+        onClick={() => navigate(`/clinicdetails/${clinic.id}`)}
       />
-      <div className="flex-1">
-        <h2 className="text-xl font-semibold text-gray-800">Dr. {clinic.name}'s Clinic </h2>
+      
+      {/* Clinic Details & Rating */}
+      <div className="flex-1 min-w-25">
+        <h2 className="text-xl font-semibold text-gray-800 truncate">
+          Dr. {clinic.name}
+        </h2>
         <p className="text-gray-500 flex items-center">
           <span className="material-icons text-red-500 mr-2">location_on</span>
           {clinic.location || "Unknown location"}
         </p>
       </div>
-      <div className="flex items-center text-yellow-500">
-        <div className="flex mt-2 text-yellow-500">
+
+      {/* Rating Stars */}
+      <div className="flex items-center text-yellow-500 mt-2  sm:mt-0 sm:ml-4">
+        <div className="flex text-sm sm:text-base">
           {[...Array(5)].map((_, i) => (
             <FaStar key={i} className={`text-lg ${i < 4 ? "fill-current" : "text-gray-300"}`} />
           ))}
@@ -92,5 +98,6 @@ const ClinicCard = ({ clinic, navigate }) => {
     </div>
   );
 };
+
 
 export default Clinics;
