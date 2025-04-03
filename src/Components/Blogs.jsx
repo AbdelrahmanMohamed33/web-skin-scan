@@ -103,9 +103,9 @@ const Diseases = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center flex-col p-24">
-      <h1 className="text-4xl font-semibold text-center lg:text-center mb-10">Browse Disease</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-5">
+    <div className="min-h-screen bg-gray-50 flex justify-center flex-col p-4  md:p-10">
+      <h1 className="text-2xl md:text-4xl font-bold text-center mt-16 text-blue-900">Browse Disease</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-5 p-8">
         {diseases.length > 0 ? (
           diseases.map((disease) => (
             <div
@@ -118,14 +118,14 @@ const Diseases = () => {
               <span className="ml-20 mt-2 font-semibold text-white px-4 py-1 rounded bg-blue-800">
                 Description
               </span>
-              <p className="mt-3 mb-4 ml-24 text-gray-700">
+              <p className="mt-2 mb-3 ml-4 md:ml-24 text-gray-700 text-sm md:text-base break-words">
                 {diseaseDetails[disease.id]?.description ?? "Unknown Description"}
               </p>
               <span className="ml-20 mt-2 font-semibold text-white px-4 py-1 rounded bg-blue-800">
                 Preventions
               </span>
               {diseaseDetails[disease.id]?.preventions && diseaseDetails[disease.id].preventions.length > 0 ? (
-                <ol className="mt-3 mb-4 ml-24 text-gray-700 list-decimal list-inside">
+                <ol className="mt-2 mb-3 ml-4 md:ml-24 text-gray-700 text-sm md:text-base break-words list-decimal list-inside">
                   {diseaseDetails[disease.id].preventions.map((prevent, i) => (
                     <li key={`${disease.id}-prevent-${i}`} className="ml-4 text-gray-700">
                       {prevent}
