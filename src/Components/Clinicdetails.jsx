@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import Domain from "../constants/Domain";
 import img from "../assets/img/doc2.jpg";
 
@@ -7,6 +7,7 @@ const Clinicdetails = () => {
   const { id } = useParams();
   const [doctor, setDoctor] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+ const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClinicdetails = async () => {
@@ -31,12 +32,12 @@ const Clinicdetails = () => {
   if (!doctor) return <div className="text-center text-red-500">Doctor not found.</div>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto  ">
-      <div className="flex items-center bg-white shadow-md rounded-lg p-6 mt-24 py-16" >
+    <div className="p-8 max-w-3xl mx-auto  ">
+      <div className="flex flex-col sm:flex-row items-center bg-white shadow-md rounded-lg p-16 mt-24 gap-4 shadow-lg hover:shadow-xl transition-shadow duration-300 transition-transform duration-300 ease-in-out transform hover:scale-105" >
         {/* ✅ الصورة على اليسار */}
-        <img src={img} alt="Doctor" className="w-40 h-40 rounded-lg object-cover" />
+        <img src={img} alt="Doctor" className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg object-cover" />
   
-        <div className="ml-6">
+        <div className="text-center sm:text-left">
           <h1 className="text-2xl font-bold text-blue-900 ">Dr. {doctor.doctor.fullName}</h1>
           <p className="text-gray-500 mb-4">{doctor.doctor.email}</p>
           <p className="mt-2 mb-1"><strong className="text-blue-900 ">Clinic Name:</strong> {doctor.name}</p>
@@ -50,9 +51,8 @@ const Clinicdetails = () => {
         </div>
       </div>
   
-      {/* زر الحجز */}
       <div className="flex justify-center items-center mt-6">
-        <button className="bg-blue-900 text-white px-5 py-2 rounded-lg hover:bg-blue-800">
+        <button className="bg-blue-900 text-white px-5 py-2 rounded-lg hover:bg-blue-800" onClick={() => navigate(`/appointment/${id}`)}>
           Book Appointment
         </button>
       </div>
