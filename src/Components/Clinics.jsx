@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Domain from "../constants/Domain";
 import { FaStar } from "react-icons/fa";
 import img from "../assets/img/doc2.jpg";
+import { getToken, isTokenExpired } from "../Helper/Tokens";
 
 const Clinics = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [clinicsList, setClinicsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // ✅ التحقق من التوكن عند تحميل الصفحة
+  useEffect(() => {
+    if (isTokenExpired(getToken("access"))) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const fetchClinicsByLocation = async (location) => {
     setIsLoading(true);
@@ -44,7 +52,7 @@ const Clinics = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className="bg-blue-900 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition">
+        <button type="submit" className="bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-900 transition">
           Search
         </button>
       </form>
@@ -88,7 +96,7 @@ const ClinicCard = ({ clinic, navigate }) => {
       </div>
 
       {/* Rating Stars */}
-      <div className="flex items-center text-yellow-500 mt-2  sm:mt-0 sm:ml-4">
+      <div className="flex items-center text-yellow-500 mt-2 sm:mt-0 sm:ml-4">
         <div className="flex text-sm sm:text-base">
           {[...Array(5)].map((_, i) => (
             <FaStar key={i} className={`text-lg ${i < 4 ? "fill-current" : "text-gray-300"}`} />
@@ -98,6 +106,5 @@ const ClinicCard = ({ clinic, navigate }) => {
     </div>
   );
 };
-
 
 export default Clinics;
