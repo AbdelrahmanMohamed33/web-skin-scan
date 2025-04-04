@@ -11,7 +11,7 @@ const ChatModal = ({ doctor, onClose, recipientId = "0fb93761-de73-4823-9585-e29
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [connection, setConnection] = useState(null);
-  const chatEndRef = useRef(null); 
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     const fetchChatHistory = async () => {
@@ -141,20 +141,21 @@ const ChatModal = ({ doctor, onClose, recipientId = "0fb93761-de73-4823-9585-e29
 
   return (
     <div className="fixed bottom-0 right-5 m-4 flex items-end justify-end z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+      <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-sm relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
           <FaTimes size={20} />
         </button>
 
         <div className="flex items-center mb-4">
-          <img src={img} alt={doctor?.name} className="w-16 h-16 rounded-full mr-4" />
+          <img src={img} alt={doctor?.name} className="w-12 h-12 rounded-full mr-4" />
+          
           <div className="flex flex-col">
             <h3 className="text-lg font-medium">{doctor?.name}</h3>
             <p className="text-green-500">online</p>
           </div>
         </div>
 
-        <div className="h-48 overflow-y-auto p-2 border rounded-lg bg-gray-100">
+        <div className="h-60 overflow-y-auto p-4 border rounded-lg bg-gray-100">
           {messages.map((message, index) => (
             <div key={index} className={`flex mb-2 ${message.senderId === getId(getToken("access")) ? "justify-end" : "justify-start"}`}>
               <div className={` rounded-lg shadow-md max-w-xs ${message.senderId === getId(getToken("access")) ? "bg-blue-500 text-white " : "bg-green-100 text-gray-900 py-1 px-1"}`}>
@@ -171,7 +172,7 @@ const ChatModal = ({ doctor, onClose, recipientId = "0fb93761-de73-4823-9585-e29
               </div>
             </div>
           ))}
-          <div ref={chatEndRef}></div> 
+          <div ref={chatEndRef}></div>
         </div>
 
         {/* Input Section */}
@@ -188,7 +189,7 @@ const ChatModal = ({ doctor, onClose, recipientId = "0fb93761-de73-4823-9585-e29
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-grow mr-2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm"
               placeholder="Write your message..."
             />
           )}
