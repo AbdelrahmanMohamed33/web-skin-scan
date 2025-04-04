@@ -86,17 +86,17 @@ const Scan = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row justify-between items-center lg:px-32 px-5 gap-5">
-      <div className="w-full lg:w-3/4 space-y-4 ">
-        <h1 className="text-3xl font-semibold text-center lg:text-start mb-8">
+    <div className="min-h-screen flex flex-col lg:flex-row justify-between items-center lg:px-32 px-5 gap-5 ">
+      <div className="w-full lg:w-3/4 space-y-4 mt-28">
+        <h1 className="text-3xl font-bold text-center lg:text-start mb-4 text-blue-900 ">
           Scan Your Disease
         </h1>
 
         {!uploadedImage ? (
-          <div>
+          <div className="mt-16">
             <label
               htmlFor="file-upload"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mt-6"
+              className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer "
             >
               Choose image...
             </label>
@@ -160,13 +160,13 @@ const Scan = () => {
       <div className="flex justify-center items-center min-h-[200px] p-8" style={{ marginTop: "-100px" }}>
         <div className="text-center">
           {isLoading ? (
-            <div>
-              <img width={200} height={200} src={load} alt="Loading" />
+            <div className="mt-16">
+              <img width={100} height={100} src={load} alt="Loading" />
             </div>
           ) : (
             <div className="space-y-4 bg-gray-200 px-4 py-4 rounded mt-36">
               {uploadedImage && !nameRes && (
-                <h2 className="text-3xl font-semibold">Upload to show details</h2>
+                <h2 className="text-xl font-semibold text-gray-500">Upload to show details</h2>
               )}
               {nameRes && (
                 <>
