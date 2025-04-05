@@ -44,7 +44,7 @@ const FeedbackPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
       {/* Page Title */}
-      <h1 className="text-4xl font-semibold text-center text-blue-800 mb-6">Feedback</h1>
+      <h1 className="text-4xl font-semibold text-center text-blue-800 mb-6 mt-28">Feedback</h1>
       <h2 className="text-lg text-center text-gray-700 mb-8">
         We value your feedback! Please let us know your thoughts.
       </h2>
