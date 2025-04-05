@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect,useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu, AiOutlineUser } from "react-icons/ai";
 import Contact from "../models/Contact";
@@ -10,6 +10,7 @@ const Navbar = () => {
   const [menu, setMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleChange = () => setMenu(!menu);
   const closeMenu = () => setMenu(false);
@@ -24,7 +25,18 @@ const Navbar = () => {
     const decoded = jwtDecode(token);
     isDoctor = decoded?.roles === "Doc";
   }
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropdown();
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <div className="fixed w-full z-10 text-white">
       <div>
@@ -41,7 +53,7 @@ const Navbar = () => {
             <NavLink to="/blogs" className={({ isActive }) => (isActive ? "text-hoverColor" : "hover:text-hoverColor transition-all")}>Browse Disease</NavLink>
 
             {/* More Dropdown */}
-            <div className="relative">
+            <div className="relative"  ref={dropdownRef}>
               <button onClick={toggleDropdown} className="flex items-center gap-1 hover:text-hoverColor transition-all">
                 <span>More</span> <ChevronDown size={18} />
               </button>
@@ -70,7 +82,7 @@ const Navbar = () => {
           </nav>
 
           {showForm && <Contact closeForm={() => setShowForm(false)} />}
-          
+
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center">
             {menu ? (
