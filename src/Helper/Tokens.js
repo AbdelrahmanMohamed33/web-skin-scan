@@ -59,9 +59,14 @@ export function getName(token) {
     }
 }
 
-export function getId(token) {
+export function getId(token = getToken("access")) {
     if (token) {
-      const decodedToken = jwtDecode(token);
-      return decodedToken.uid ;
+      try {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.uid;
+      } catch (e) {
+        console.error("Error decoding token:", e);
+      }
+    }
+    return null;
   }
-}
