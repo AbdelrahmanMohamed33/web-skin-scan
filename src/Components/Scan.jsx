@@ -12,13 +12,13 @@ const Scan = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
+  const [hasScanned, setHasScanned] = useState(false); // ✅ الحالة الجديدة
   const navigate = useNavigate();
 
   // Server response
   const [nameRes, setNameRes] = useState("");
   const [descriptionRes, setDescriptionRes] = useState("");
   const [preventionsRes, setPreventionsRes] = useState([]);
-  const [imageRes, setImageRes] = useState("");
   const [riskRes, setRiskRes] = useState("");
 
   const handleFileUpload = (e) => {
@@ -30,6 +30,8 @@ const Scan = () => {
 
   const handleUpload = async () => {
     setIsLoading(true);
+    setHasScanned(false); // ⛔ reset عند بداية الرفع
+
     if (isTokenExpired(getToken("access"))) {
       navigate("/login");
       return;
@@ -60,21 +62,21 @@ const Scan = () => {
 
       if (response.status === 200) {
         const data = response.data.data || {};
-        if (data) { // Assuming your API returns this flag
-          setNameRes(data.name || "No name available");
-          setDescriptionRes(data.description || "No description available");
+        if (data) {
+          setNameRes(data.name || "");
+          setDescriptionRes(data.description || "");
           setPreventionsRes(data.preventions || []);
-          setImageRes(data.image || "");
-          setRiskRes(data.risk || "No risk data available");
+          setRiskRes(data.risk || "");
         } else {
-         // console.log(response.data.data);
-         // console.log(response.status);
-          setErrorMessage("This image is not a wound. Please upload a clear image of a wound.");
+          setNameRes(""); // ضمان عدم عرض بيانات خاطئة
         }
       }
+
       setIsLoading(false);
+      setHasScanned(true); // ✅ تحديد أن الفحص تم
     } catch (error) {
       setIsLoading(false);
+      setHasScanned(true); // ✅ تحديد أن الفحص تم (حتى في حال الخطأ)
       setErrorMessage(error.response?.data?.data?.message || error.message || "An error occurred");
     }
   };
@@ -86,29 +88,22 @@ const Scan = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row justify-between items-center lg:px-32 px-5 gap-5 ">
+    <div className="min-h-screen flex flex-col lg:flex-row justify-between items-center lg:px-32 px-5 gap-5">
       <div className="w-full lg:w-3/4 space-y-4 mt-28">
-        <h1 className="text-3xl font-bold text-center lg:text-start mb-4 text-blue-900 ">
+        <h1 className="text-3xl font-bold text-center lg:text-start mb-4 text-blue-900">
           Scan Your Disease
         </h1>
 
-        {!uploadedImage ? (
+        {!uploadedImage && (
           <div className="mt-16">
             <label
               htmlFor="file-upload"
-              className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer "
+              className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
             >
               Choose image...
             </label>
-            <input
-              id="file-upload"
-              type="file"
-              className="hidden"
-              onChange={handleFileUpload}
-            />
+            <input id="file-upload" type="file" className="hidden" onChange={handleFileUpload} />
           </div>
-        ) : (
-          ""
         )}
 
         {uploadedImage && (
@@ -126,7 +121,7 @@ const Scan = () => {
                   <button
                     key={model}
                     onClick={() => setSelectedModel(model)}
-                    className={`py-2 px-4 rounded ${selectedModel === model ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                    className={`py-2 px-4 rounded ${selectedModel === model ? "bg-blue-900 text-white" : "bg-gray-200"}`}
                   >
                     {model} Model
                   </button>
@@ -136,9 +131,7 @@ const Scan = () => {
           </>
         )}
 
-        {errorMessage && (
-          <div className="mt-4 text-red-500">{errorMessage}</div>
-        )}
+        {errorMessage && <div className="mt-4 text-red-500">{errorMessage}</div>}
       </div>
 
       <div className="w-full lg:w-3/4">
@@ -150,9 +143,7 @@ const Scan = () => {
             alt="Uploaded"
           />
         ) : (
-          <img className="rounded-lg" src={img} alt="Default" 
-          style={{ width: "500px", height: "400px" }}
-          />
+          <img className="rounded-lg" src={img} alt="Default" style={{ width: "500px", height: "400px" }} />
         )}
       </div>
 
@@ -164,29 +155,28 @@ const Scan = () => {
               <img width={100} height={100} src={load} alt="Loading" />
             </div>
           ) : (
-            <div className="space-y-4 bg-gray-200 px-4 py-4 rounded mt-36">
-              {uploadedImage && !nameRes && (
-                <h2 className="text-xl font-semibold text-gray-500">Upload to show details</h2>
-              )}
-              {nameRes && (
-                <>
-                  <h2 className="text-2xl font-semibold text-blue-600 ">Name: {nameRes || "No name available"}</h2>
-                  <p className="text-lg">{descriptionRes || "No description available"}</p>
-                  <div>
-                    <h3 className="text-xl font-semibold text-blue-600">Preventions</h3>
-                    <ul className="list-disc list-inside">
-                      {preventionsRes.length > 0 ? (
-                        preventionsRes.map((prevention, index) => (
-                          <li key={index}>{prevention}</li>
-                        ))
-                      ) : (
-                        <li>No preventions available</li>
-                      )}
-                    </ul>
-                  </div>
-                  <h3 className="text-xl font-semibold text-blue-600">Risk Level</h3>
-                  <p className="text-lg">Risk Level: {riskRes || "No risk data available"}</p>
-                </>
+            <div className="space-y-4 bg-blue-900 px-4 py-4 rounded mt-36">
+              {hasScanned && !nameRes ? (
+                <h2 className="text-xl font-semibold text-gray-200 ">There is no wound or effect</h2>
+              ) : (
+                nameRes && (
+                  <>
+                    <h2 className="text-2xl font-semibold text-gray-200">Name: {nameRes}</h2>
+                    <p className="text-lg text-gray-400">{descriptionRes}</p>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-200">Preventions</h3>
+                      <ul className="list-disc list-inside text-gray-400">
+                        {preventionsRes.length > 0 ? (
+                          preventionsRes.map((prevention, index) => <li key={index}>{prevention}</li>)
+                        ) : (
+                          <li>No preventions available</li>
+                        )}
+                      </ul>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-200">Risk Level</h3>
+                    <p className="text-lg text-gray-400">Risk Level: {riskRes}</p>
+                  </>
+                )
               )}
             </div>
           )}
