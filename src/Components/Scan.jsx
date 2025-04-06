@@ -117,7 +117,7 @@ const Scan = () => {
             <div className="mt-4">
               <h2 className="text-lg font-semibold">Select Model:</h2>
               <div className="flex gap-4 mt-2">
-                {["Burn", "Type", "Skin Disease"].map((model) => (
+                {["Burn", "Type", "SkinDisease"].map((model) => (
                   <button
                     key={model}
                     onClick={() => setSelectedModel(model)}
