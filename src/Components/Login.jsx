@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Domain from "../constants/Domain";
+import load from "../assets/img/load.jpg";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState([]);
+    const [loading, setLoading] = useState(false); // Start as false
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -16,6 +18,9 @@ const Login = () => {
             setErrorMessage(['Email and password are required.']);
             return;
         }
+
+        setLoading(true); // Start loading
+
         try {
             const response = await axios.post(`${Domain.apiUrl()}/api/Auth/auth/login`, {
                 email,
@@ -32,6 +37,7 @@ const Login = () => {
             }
         } catch (error) {
             setErrorMessage([error.response?.data?.data?.message || 'Login failed. Please check your credentials.']);
+            setLoading(false); // Stop loading on error
         }
     };
 
@@ -40,62 +46,70 @@ const Login = () => {
             <h1 className="text-4xl font-semibold text-center text-blue-800 mb-8">Login</h1>
             <h2 className="text-2xl text-center mb-4">Welcome Back!</h2>
 
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                {/* Email Input */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorMessage.length > 0 ? 'border-red-500' : ''}`}
-                        placeholder="Email"
-                    />
+            {loading ? (
+                <div className="flex justify-center items-center py-12">
+                    <img src={load} alt="Loading..." className="w-16 h-16 mb-16" />
                 </div>
-
-                {/* Password Input */}
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorMessage.length > 0 ? 'border-red-500' : ''}`}
-                        placeholder="Password"
-                    />
-                </div>
-
-                {/* Error Message */}
-                {errorMessage.length > 0 && (
-                    <div className="mb-6 text-red-500">
-                        <ul>
-                            {errorMessage.map((error, index) => (
-                                <li key={index}>{error}</li>
-                            ))}
-                        </ul>
+            ) : (
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                    {/* Email Input */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorMessage.length > 0 ? 'border-red-500' : ''}`}
+                            placeholder="Email"
+                        />
                     </div>
-                )}
 
-                {/* Forgot Password Link */}
-                <p className="text-right">
-                    <Link to="/forgot-password" className="text-blue-700 hover:underline">
-                        Forgot Password?
-                    </Link>
-                </p>
+                    {/* Password Input */}
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errorMessage.length > 0 ? 'border-red-500' : ''}`}
+                            placeholder="Password"
+                        />
+                    </div>
 
-                {/* Login Button */}
-                <button
-                    type="submit"
-                    className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-                >
-                    Login
-                </button>
-            </form>
+                    {/* Error Message */}
+                    {errorMessage.length > 0 && (
+                        <div className="mb-6 text-red-500">
+                            <ul>
+                                {errorMessage.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Forgot Password Link */}
+                    <p className="text-right mb-4">
+                        <Link to="/forgot-password" className="text-blue-700 hover:underline">
+                            Forgot Password?
+                        </Link>
+                    </p>
+
+                    {/* Login Button */}
+                    <button
+                        type="submit"
+                        className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                    >
+                        Login
+                    </button>
+                </form>
+            )}
 
             {/* Links */}
-            <p className="text-center">
-                Don't have an account? <Link to="/register" className="text-blue-700 hover:underline">Register here</Link>
-            </p>
+            {!loading && (
+                <p className="text-center">
+                    Don't have an account? <Link to="/register" className="text-blue-700 hover:underline">Register here</Link>
+                </p>
+            )}
         </div>
     );
 };
