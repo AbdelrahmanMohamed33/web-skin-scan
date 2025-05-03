@@ -42,13 +42,13 @@ const Login = () => {
 
     return (
         <div className="container mx-auto p-4 pt-20">
-            <h1 className="text-4xl font-semibold text-center text-blue-800 mb-8">Login</h1>
+            <h1 className="text-4xl font-semibold text-center text-blue-800 mb-8 mt-2">Login</h1>
             <h2 className="text-2xl text-center mb-4">Welcome Back!</h2>
 
             {loading ? (
                 <div className="flex flex-col justify-center items-center py-12 space-y-4">
                 <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-700 font-medium">Logging please wait...</p>
+                <p className="text-gray-700 font-medium mb-16">Logging please wait...</p>
               </div>
               
             ) : (
