@@ -76,7 +76,7 @@ export default function History({ onHistoryDataChange }) {
               <p className="text-gray-600 py-1">Date: {item.addedDate}</p>
               <Link
                 to={`/details/${item.id}`}
-                className="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+                className="inline-block mt-4 bg-blue-900 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
               >
                 View Details
               </Link>
