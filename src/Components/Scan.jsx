@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import img from "../assets/img/scanoo.jpg";
-import load from "../assets/img/load.jpg";
 import { isTokenExpired, getToken } from "../Helper/Tokens";
 import Domain from "../constants/Domain";
 
@@ -12,10 +11,10 @@ const Scan = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
-  const [hasScanned, setHasScanned] = useState(false); // ✅ الحالة الجديدة
+  const [hasScanned, setHasScanned] = useState(false); 
   const navigate = useNavigate();
 
-  // Server response
+  
   const [nameRes, setNameRes] = useState("");
   const [descriptionRes, setDescriptionRes] = useState("");
   const [preventionsRes, setPreventionsRes] = useState([]);
@@ -30,7 +29,7 @@ const Scan = () => {
 
   const handleUpload = async () => {
     setIsLoading(true);
-    setHasScanned(false); // ⛔ reset عند بداية الرفع
+    setHasScanned(false); 
 
     if (isTokenExpired(getToken("access"))) {
       navigate("/login");
@@ -150,11 +149,13 @@ const Scan = () => {
       {/* Centered content for results */}
       <div className="flex justify-center items-center min-h-[200px] p-8" style={{ marginTop: "-100px" }}>
         <div className="text-center">
-          {isLoading ? (
-            <div className="mt-16">
-              <img width={100} height={100} src={load} alt="Loading" />
-            </div>
-          ) : (
+        {isLoading ? (
+                <div className="flex flex-col justify-center items-center py-12 space-y-4 mt-8">
+                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-700 font-medium">loading please wait...</p>
+              </div>
+              
+            ) :  (
             <div className="space-y-4 bg-blue-900 px-4 py-4 rounded mt-36">
               {hasScanned && !nameRes ? (
                 <h2 className="text-xl font-semibold text-gray-200 ">There is no wound or effect</h2>
