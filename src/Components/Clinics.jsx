@@ -59,10 +59,12 @@ const Clinics = () => {
 
       {/* Loading State */}
       {isLoading ? (
-        <div className="text-center text-lg font-semibold text-gray-500">Loading...</div>
-      ) : clinicsList.length === 0 ? (
-        <div className="text-center text-gray-500 mb-36 mt-24">No clinics found.</div>
-      ) : (
+        <div className="flex flex-col justify-center items-center py-12 space-y-4">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-700 font-medium"> please wait...</p>
+        </div>) : clinicsList.length === 0 ? (
+          <div className="text-center text-gray-500 mb-36 mt-24">No clinics found.</div>
+        ) : (
         <ul className="space-y-6">
           {clinicsList.map((clinic, index) => (
             <ClinicCard key={index} clinic={clinic} navigate={navigate} />
@@ -83,7 +85,7 @@ const ClinicCard = ({ clinic, navigate }) => {
         className="w-20 h-20 rounded-full object-cover mr-5 cursor-pointer"
         onClick={() => navigate(`/clinicdetails/${clinic.id}`)}
       />
-      
+
       {/* Clinic Details & Rating */}
       <div className="flex-1 min-w-25">
         <h2 className="text-xl font-semibold text-gray-800 truncate">
