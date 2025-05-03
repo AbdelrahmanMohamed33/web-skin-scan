@@ -24,6 +24,7 @@ import Users from './Components/Users';
 import Chat from './Components/Chat';
 import Clinics from './Components/Clinics';
 import Clinicdetails from './Components/Clinicdetails';
+import Chatdoctor from './Components/Chatdoctor';
 
 function App() {
   const [page, setPage] = useState('login');
@@ -56,6 +57,8 @@ function App() {
               <Route path="/chat" element={<Chat/>}/>
               <Route path="/clinics" element={<Clinics/>}/>
               <Route path="/clinicdetails/:id" element={<Clinicdetails/>}/>
+              <Route path="/chatdoctor" element={<Chatdoctor/>}/>
+
             </Routes>
           </main>
           <Footer />
