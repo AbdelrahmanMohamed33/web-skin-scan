@@ -23,7 +23,7 @@ const Users = () => {
       const response = await fetch(`${Domain.apiUrl()}/api/Auth/all`);
       const data = await response.json();
       if (response.ok) {
-        const filtered = data.filter((user) => user.userName && user.id !== getId() && !user.userName.startsWith(".."));
+        const filtered = data.filter((user) => user.userName && user.id !== getId() && !user.userName.startsWith("doc"));
         setUsers(filtered);
       }
     } catch (error) {
