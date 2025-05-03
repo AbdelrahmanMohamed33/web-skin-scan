@@ -69,7 +69,7 @@ const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col px-5 lg:px-32 pt-16">
       <div className="text-center mb-10 mt-16">
-        <h1 className="text-4xl font-semibold">Our Doctors</h1>
+        <h1 className="text-4xl font-bold text-blue-900 ">Our Doctors</h1>
         <div className="flex justify-center gap-5 mt-4">
           <button className="bg-[#d5f2ec] text-blue-400 px-4 py-2 rounded-lg active:bg-[#ade9dc]" onClick={() => slider.current.slickPrev()}>
             <FaArrowLeft size={25} />
