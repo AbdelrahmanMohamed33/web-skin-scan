@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Domain from "../constants/Domain";
 import { getToken } from "../Helper/Tokens";
+import { useNavigate } from 'react-router-dom';
 
 const FeedbackPage = () => {
   const [subject, setSubject] = useState('');
   const [feedback, setFeedback] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+ const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -79,7 +82,12 @@ const FeedbackPage = () => {
         >
           Submit Feedback
         </button>
-
+        <button
+          className="w-full bg-blue-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg transition duration-300"
+          onClick={() => navigate(`/users`)}        >
+          Users
+        </button>
+        
         {/* Success & Error Messages */}
         {successMessage && <p className="mt-4 text-green-600 text-center">{successMessage}</p>}
         {errorMessage && <p className="mt-4 text-red-600 text-center">{errorMessage}</p>}
