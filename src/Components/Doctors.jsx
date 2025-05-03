@@ -2,17 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FaArrowLeft, FaArrowRight, FaWhatsapp, FaCalendarAlt, FaComment, FaStar } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaCalendarAlt, FaComment, FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import loading from "../assets/img/load.jpg";
 import img from "../assets/img/doc2.jpg";
 import Domain from "../constants/Domain";
 import ChatDoctor from "./Chatdoctor";
 
 const LoadingIcon = () => (
-  <div className="flex justify-center items-center h-screen">
-    <img src={loading} className="w-16 h-16" alt="Loading..." />
-  </div>
+  <div className="flex flex-col justify-center items-center py-12 space-y-4 mb-32 ">
+  <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mt-32"></div>
+  <p className="text-gray-700 font-medium "> please wait ...</p>
+</div>
 );
 
 const doctorsEndpoint = `${Domain.resoureseUrl()}/api/Specialization/get-all-docs`;
