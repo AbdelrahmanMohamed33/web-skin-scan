@@ -82,11 +82,6 @@ const FeedbackPage = () => {
         >
           Submit Feedback
         </button>
-        <button
-          className="w-full bg-blue-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg transition duration-300"
-          onClick={() => navigate(`/users`)}        >
-          Users
-        </button>
         
         {/* Success & Error Messages */}
         {successMessage && <p className="mt-4 text-green-600 text-center">{successMessage}</p>}
