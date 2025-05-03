@@ -12,6 +12,8 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [connection, setConnection] = useState(null);
   const chatEndRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   useEffect(() => {
     const fetchChatHistory = async () => {
@@ -94,27 +96,30 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
     formData.append("file", selectedFile);
     formData.append("senderId", getId());
     formData.append("receiverId", recipientId);
-
+  
     try {
       const response = await fetch(`${Domain.resoureseUrl()}/api/Chat/file-upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${getToken("access")}` },
         body: formData,
       });
-
+  
       const data = await response.json();
       if (!data.fileUrl) {
         throw new Error("No file URL returned from server.");
       }
-
+  
       const messageData = {
         senderId: getId(),
         recipientId,
         type: "image",
-        fileUrl: data.fileUrl,  // Make sure the URL is valid
+        fileUrl: data.fileUrl.startsWith("http")
+          ? data.fileUrl
+          : `${Domain.resoureseUrl()}${data.fileUrl}`,
       };
-
+  
       await connection.invoke("sendMessage", messageData);
+      console.log("Sending Image Message:", messageData);
       setMessages((prev) => [...prev, messageData]);
       setSelectedFile(null);
       setPreviewUrl(null);
@@ -122,6 +127,7 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
       console.error("Error sending image:", err);
     }
   };
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -132,9 +138,10 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
   };
 
   return (
-<div className="fixed bottom-0 right-0 left-0 sm:right-5 sm:left-auto m-2 flex items-end justify-center sm:justify-end z-50">
 
-<div className="bg-white rounded-lg shadow-lg p-3 w-full max-w-md sm:max-w-sm relative">
+    <div className="fixed bottom-0 right-0 left-0 sm:right-5 sm:left-auto m-2 flex items-end justify-center sm:justify-end z-50">
+
+      <div className="bg-white rounded-lg shadow-lg p-3 w-full max-w-md sm:max-w-sm relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
           <FaTimes size={20} />
         </button>
@@ -147,18 +154,37 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
           </div>
         </div>
 
-        <div className="h-60 overflow-y-auto p-4 border rounded-lg bg-gray-100">
+        {selectedImage && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 "
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative">
+              <img src={selectedImage} alt="Preview" className="max-w-full max-h-screen rounded-lg p-10 mt-4 bg-blue-900 " />
+              <button
+                className="absolute top-2 right-2 text-white text-5xl mb-2 mt-2 "
+                onClick={() => setSelectedImage(null)}
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="h-60 overflow-y-auto p-4  border rounded-lg bg-gray-100">
           {messages.map((msg, i) => (
             <div key={i} className={`flex mb-2 ${msg.senderId === getId() ? "justify-end" : "justify-start"}`}>
-              <div className={`rounded-lg shadow-md max-w-xs ${msg.senderId === getId() ? "bg-blue-500 text-white" : "bg-gray-400 text-gray-900 p-1 text-white"}`}>
+              <div className={`rounded-lg shadow-md max-w-xs ${msg.senderId === getId() ? "bg-blue-500 text-white" : "bg-green-200 text-gray-700 p-1"}`}>
                 {msg.type === "image" && (
                   <img
                     src={msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`}
                     alt="Sent"
-                    className="w-22 h-20 rounded-lg"
+                    className="w-22 h-20 rounded-lg cursor-pointer"
+                    onClick={() => setSelectedImage(msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`)}
                   />
+
                 )}
-                {msg.content?.trim() && <p className=" px-3 py-2 rounded-lg">{msg.content}</p>}
+                {msg.content?.trim() && <p className=" px-6 py-3 rounded-lg">{msg.content}</p>}
               </div>
             </div>
           ))}
