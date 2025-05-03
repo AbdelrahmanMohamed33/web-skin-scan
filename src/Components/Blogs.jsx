@@ -3,11 +3,11 @@ import axios from "axios";
 import { getToken, isTokenExpired } from "../Helper/Tokens";
 import Domain from "../constants/Domain";
 import { useNavigate } from "react-router-dom";
-import loading from "../assets/img/load.jpg";
 
 const LoadingIcon = () => (
-  <div className="loader flex justify-center items-center h-screen" style={{ paddingBottom: "150px" }}>
-    <img src={loading} className="w-16 h-16" alt="Loading..." />
+  <div className="flex flex-col justify-center items-center py-12 space-y-4 mb-32 ">
+    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mt-32"></div>
+    <p className="text-gray-700 font-medium "> please wait ...</p>
   </div>
 );
 
@@ -36,7 +36,7 @@ const Diseases = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-             
+
         if (response.ok) { // Check for successful response (status 200-299)
           const data = await response.json();
           setDiseases(data.data);
