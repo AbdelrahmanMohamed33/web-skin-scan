@@ -89,7 +89,7 @@ const FeedbackPage = () => {
       </div>
 
       {/* Additional Info */}
-      <p className="text-gray-600 text-sm mt-6 text-center">
+      <p className="text-gray-600 text-sm mt-6 text-center mb-8">
         If you have any technical issues, please let us know.  
         <br />
         You can also access your program via web browser.
