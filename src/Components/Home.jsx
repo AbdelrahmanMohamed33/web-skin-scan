@@ -43,7 +43,6 @@ const Home = () => {
       <Blogs />
       <Doctors />
       <Feedback />
-      <Footer />
     </div>
   );
 };
