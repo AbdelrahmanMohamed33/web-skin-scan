@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Domain from "../constants/Domain";
-import load from "../assets/img/load.jpg";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -47,9 +46,11 @@ const Login = () => {
             <h2 className="text-2xl text-center mb-4">Welcome Back!</h2>
 
             {loading ? (
-                <div className="flex justify-center items-center py-12">
-                    <img src={load} alt="Loading..." className="w-16 h-16 mb-16" />
-                </div>
+                <div className="flex flex-col justify-center items-center py-12 space-y-4">
+                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-700 font-medium">Logging please wait...</p>
+              </div>
+              
             ) : (
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                     {/* Email Input */}
