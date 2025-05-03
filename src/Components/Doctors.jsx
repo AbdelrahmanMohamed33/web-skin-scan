@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import loading from "../assets/img/load.jpg";
 import img from "../assets/img/doc2.jpg";
 import Domain from "../constants/Domain";
-import ChatModal from "./Chat";
+import ChatDoctor from "./Chatdoctor";
 
 const LoadingIcon = () => (
   <div className="flex justify-center items-center h-screen">
@@ -33,6 +33,7 @@ const Doctors = () => {
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         const data = await response.json();
+        console.log(data.data);
         setDoctors(data.data);
       } catch (err) {
         setError(err);
@@ -68,7 +69,7 @@ const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col px-5 lg:px-32 pt-16">
       <div className="text-center mb-10 mt-16">
-        <h1 className="text-4xl font-semibold text-blue-900">Our Doctors</h1>
+        <h1 className="text-4xl font-semibold">Our Doctors</h1>
         <div className="flex justify-center gap-5 mt-4">
           <button className="bg-[#d5f2ec] text-blue-400 px-4 py-2 rounded-lg active:bg-[#ade9dc]" onClick={() => slider.current.slickPrev()}>
             <FaArrowLeft size={25} />
@@ -95,7 +96,7 @@ const Doctors = () => {
                   ))}
                 </div>
                 <div className="flex  gap-4 mt-3 absolute bottom-4 right-4">
-                 
+
                   <button onClick={() => navigate(`/appointment/${doctor.id}`)}>
                     <FaCalendarAlt size={20} className="text-blue-500" />
                   </button>
@@ -109,7 +110,14 @@ const Doctors = () => {
         </Slider>
       </div>
 
-      {isChatOpen && <ChatModal doctor={chatDoctor} onClose={() => setIsChatOpen(false)} />}
+      {isChatOpen && (
+        <ChatDoctor
+          doctor={chatDoctor}
+          recipientId={chatDoctor?.id} 
+          onClose={() => setIsChatOpen(false)}
+        />
+      )}
+
     </div>
   );
 };
