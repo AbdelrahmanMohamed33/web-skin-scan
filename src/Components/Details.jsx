@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getToken } from "../Helper/Tokens";
-import load from "../assets/img/load.jpg";
 import Domain from "../constants/Domain";
 
 const LoadingIcon = () => (
