@@ -53,12 +53,15 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
       .then(() => console.log("Connected to SignalR"))
       .catch((err) => console.error("Connection failed:", err));
 
-    newConnection.on("receiveMessage", (message) => {
-      if (message.recipientId === getId()) {
-        setMessages((prev) => [...prev, message]);
-      }
-    });
-
+      newConnection.on("receiveMessage", (message) => {
+        if (
+          message.recipientId === getId() &&
+          (message.type !== "text" || (message.content && message.content.trim() !== ""))
+        ) {
+          setMessages((prev) => [...prev, message]);
+        }
+      });
+      
     newConnection.on("receiveFile", (message) => {
       setMessages((prev) => [...prev, message]);
     });
@@ -79,16 +82,23 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
   };
 
   const handleSendTextMessage = async () => {
+    const trimmedMessage = newMessage.trim();
+    if (!trimmedMessage) return; // تجاهل الرسالة الفاضية
+
     const messageData = {
       senderId: getId(),
       recipientId,
       type: "text",
-      content: newMessage.trim(),
+      content: trimmedMessage,
     };
 
-    await connection.invoke("sendMessage", messageData);
-    setMessages((prev) => [...prev, messageData]);
-    setNewMessage("");
+    try {
+      await connection.invoke("sendMessage", messageData);
+      setMessages((prev) => [...prev, messageData]);
+      setNewMessage("");
+    } catch (err) {
+      console.error("Error sending text message:", err);
+    }
   };
 
   const handleSendImageMessage = async () => {
@@ -96,19 +106,19 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
     formData.append("file", selectedFile);
     formData.append("senderId", getId());
     formData.append("receiverId", recipientId);
-  
+
     try {
       const response = await fetch(`${Domain.resoureseUrl()}/api/Chat/file-upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${getToken("access")}` },
         body: formData,
       });
-  
+
       const data = await response.json();
       if (!data.fileUrl) {
         throw new Error("No file URL returned from server.");
       }
-  
+
       const messageData = {
         senderId: getId(),
         recipientId,
@@ -117,7 +127,7 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
           ? data.fileUrl
           : `${Domain.resoureseUrl()}${data.fileUrl}`,
       };
-  
+
       await connection.invoke("sendMessage", messageData);
       console.log("Sending Image Message:", messageData);
       setMessages((prev) => [...prev, messageData]);
@@ -127,7 +137,7 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
       console.error("Error sending image:", err);
     }
   };
-  
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -172,22 +182,29 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
         )}
 
         <div className="h-60 overflow-y-auto p-4  border rounded-lg bg-gray-100">
-          {messages.map((msg, i) => (
-            <div key={i} className={`flex mb-2 ${msg.senderId === getId() ? "justify-end" : "justify-start"}`}>
-              <div className={`rounded-lg shadow-md max-w-xs ${msg.senderId === getId() ? "bg-blue-500 text-white" : "bg-green-200 text-gray-700 p-1"}`}>
-                {msg.type === "image" && (
-                  <img
-                    src={msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`}
-                    alt="Sent"
-                    className="w-22 h-20 rounded-lg cursor-pointer"
-                    onClick={() => setSelectedImage(msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`)}
-                  />
-
-                )}
-                {msg.content?.trim() && <p className=" px-6 py-3 rounded-lg">{msg.content}</p>}
+          {messages
+            .filter((msg) => !(msg.type === "text" && (!msg.content || msg.content.trim().length === 0)))
+            .map((msg, i) => (
+              <div key={i} className={`flex mb-2 ${msg.senderId === getId() ? "justify-end" : "justify-start"}`}>
+                <div className={`rounded-lg shadow-md max-w-xs ${msg.type === "text"
+                  ? msg.senderId === getId()
+                    ? "bg-blue-500 text-white px-6 py-3"
+                    : "bg-green-200 text-gray-700 px-6 py-3"
+                  : ""}`}>
+                  {msg.type === "image" && (
+                    <img
+                      src={msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`}
+                      alt="Sent"
+                      className="w-22 h-20 rounded-lg cursor-pointer"
+                      onClick={() => setSelectedImage(msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`)}
+                    />
+                  )}
+                  {msg.type === "text" && msg.content?.trim() && (
+                    <p>{msg.content}</p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           <div ref={chatEndRef}></div>
         </div>
 
