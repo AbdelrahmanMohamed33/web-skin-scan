@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FaComments, FaArrowLeft } from "react-icons/fa";
 import ChatModal from "./Chat";
 import img from "../assets/img/doc5.jpg";
-import load from "../assets/img/load.jpg";
 import Domain from "../constants/Domain";
 import { getId } from "../Helper/Tokens";
 
@@ -48,10 +47,10 @@ const Users = () => {
       </div>
 
       {loading ? (
-        <div className="mt-10 text-gray-600 text-lg animate-pulse">
-          <h5 className="mb-8 py-8">Loading users...</h5>
-          <img src={load} className="w-16 h-16 mt-8" alt="Loading..." />
-        </div>
+        <div className="flex flex-col justify-center items-center py-12 space-y-4">
+        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-700 font-medium">Users, please wait...</p>
+      </div>
       ) : (
         <div className="mt-5 w-full max-w-4xl flex flex-col gap-6">
           {!users.length ? (
