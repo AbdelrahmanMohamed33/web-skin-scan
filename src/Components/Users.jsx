@@ -74,7 +74,6 @@ const UserCard = ({ user, onChatClick }) => (
   <div className="bg-white p-4 sm:p-6 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md hover:shadow-lg transition-shadow">
     <div>
       <h2 className="text-lg font-semibold text-gray-800">{user.userName}</h2>
-      <p className="text-sm text-gray-500">ID: {user.id}</p>
     </div>
     <div className="flex items-center gap-4">
       <img src={img} alt={user.userName} className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-blue-400" />
