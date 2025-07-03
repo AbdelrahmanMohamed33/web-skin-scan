@@ -150,93 +150,104 @@ const ChatModal = ({ doctor, onClose, recipientId }) => {
   return (
 
     <div className="fixed bottom-0 right-0 left-0 sm:right-5 sm:left-auto m-2 flex items-end justify-center sm:justify-end z-50">
+  <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-md sm:max-w-sm relative min-h-[600px] sm:min-h-[500px]">
 
-      <div className="bg-white rounded-lg shadow-lg p-3 w-full max-w-md sm:max-w-sm relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
-          <FaTimes size={20} />
-        </button>
+    <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+      <FaTimes size={20} />
+    </button>
 
-        <div className="flex items-center mb-4">
-          <img src={img} alt={doctor?.name} className="w-12 h-12 rounded-full mr-4" />
-          <div>
-            <h3 className="text-lg font-medium">{doctor?.userName}</h3>
-            <p className="text-green-500">online</p>
-          </div>
-        </div>
+    {/* Header */}
+    <div className="flex items-center mb-4">
+      <img src={img} alt={doctor?.name} className="w-12 h-12 rounded-full mr-4" />
+      <div>
+        <h3 className="text-lg font-medium">{doctor?.userName}</h3>
+        <p className="text-green-500">online</p>
+      </div>
+    </div>
 
-        {selectedImage && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 "
+    {/* Image Preview (Full Screen on Click) */}
+    {selectedImage && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4"
+        onClick={() => setSelectedImage(null)}
+      >
+        <div className="relative">
+          <img src={selectedImage} alt="Preview" className="max-w-full max-h-screen rounded-lg p-10 mt-4 bg-blue-900" />
+          <button
+            className="absolute top-2 right-2 text-white text-5xl"
             onClick={() => setSelectedImage(null)}
           >
-            <div className="relative">
-              <img src={selectedImage} alt="Preview" className="max-w-full max-h-screen rounded-lg p-10 mt-4 bg-blue-900 " />
-              <button
-                className="absolute top-2 right-2 text-white text-5xl mb-2 mt-2 "
-                onClick={() => setSelectedImage(null)}
-              >
-                &times;
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div className="h-60 overflow-y-auto p-4  border rounded-lg bg-gray-100">
-          {messages
-            .filter((msg) => !(msg.type === "text" && (!msg.content || msg.content.trim().length === 0)))
-            .map((msg, i) => (
-              <div key={i} className={`flex mb-2 ${msg.senderId === getId() ? "justify-end" : "justify-start"}`}>
-                <div className={`rounded-lg shadow-md max-w-xs ${msg.type === "text"
-                  ? msg.senderId === getId()
-                    ? "bg-blue-500 text-white px-6 py-3"
-                    : "bg-green-200 text-gray-700 px-6 py-3"
-                  : ""}`}>
-                  {msg.type === "image" && (
-                    <img
-                      src={msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`}
-                      alt="Sent"
-                      className="w-22 h-20 rounded-lg cursor-pointer"
-                      onClick={() => setSelectedImage(msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`)}
-                    />
-                  )}
-                  {msg.type === "text" && msg.content?.trim() && (
-                    <p>{msg.content}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          <div ref={chatEndRef}></div>
-        </div>
-
-        <div className="flex mt-4 items-center">
-          {previewUrl ? (
-            <div className="flex items-center border rounded-lg p-2 bg-gray-200 w-full">
-              <img src={previewUrl} alt="Preview" className="w-12 h-12 rounded-lg shadow-md mr-2" />
-              <button onClick={() => { setSelectedFile(null); setPreviewUrl(null); }} className="text-red-500 hover:text-red-700">
-                <FaTimes size={20} />
-              </button>
-            </div>
-          ) : (
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-300 text-sm"
-              placeholder="Write your message..."
-            />
-          )}
-
-          <label htmlFor="fileInput" className="text-gray-400 hover:text-gray-700 font-bold py-2 px-2 cursor-pointer">
-            <FaUpload />
-          </label>
-          <input type="file" id="fileInput" accept="image/*" onChange={handleFileChange} hidden />
-
-          <button onClick={handleSendMessage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            <FaPaperPlane />
+            &times;
           </button>
         </div>
       </div>
+    )}
+
+    {/* Messages List */}
+    <div className="h-[350px] sm:h-[300px] overflow-y-auto p-4 border rounded-lg bg-gray-100">
+      {messages
+        .filter((msg) => !(msg.type === "text" && (!msg.content || msg.content.trim().length === 0)))
+        .map((msg, i) => (
+          <div key={i} className={`flex mb-2 ${msg.senderId === getId() ? "justify-end" : "justify-start"}`}>
+            <div className={`rounded-lg shadow-md max-w-xs ${
+              msg.type === "text"
+                ? msg.senderId === getId()
+                  ? "bg-blue-500 text-white px-6 py-3"
+                  : "bg-green-200 text-gray-700 px-6 py-3"
+                : ""
+            }`}>
+              {msg.type === "image" && (
+                <img
+                  src={msg.fileUrl?.startsWith("http") ? msg.fileUrl : `${Domain.resoureseUrl()}${msg.fileUrl}`}
+                  alt="Sent"
+                  className="w-22 h-20 rounded-lg cursor-pointer"
+                  onClick={() =>
+                    setSelectedImage(
+                      msg.fileUrl?.startsWith("http")
+                        ? msg.fileUrl
+                        : `${Domain.resoureseUrl()}${msg.fileUrl}`
+                    )
+                  }
+                />
+              )}
+              {msg.type === "text" && msg.content?.trim() && <p>{msg.content}</p>}
+            </div>
+          </div>
+        ))}
+      <div ref={chatEndRef}></div>
     </div>
+
+    {/* Input + Send */}
+    <div className="flex mt-4 items-center gap-2">
+      {previewUrl ? (
+        <div className="flex items-center border rounded-lg p-2 bg-gray-200 w-full">
+          <img src={previewUrl} alt="Preview" className="w-12 h-12 rounded-lg shadow-md mr-2" />
+          <button onClick={() => { setSelectedFile(null); setPreviewUrl(null); }} className="text-red-500 hover:text-red-700">
+            <FaTimes size={20} />
+          </button>
+        </div>
+      ) : (
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-300 text-sm"
+          placeholder="Write your message..."
+        />
+      )}
+
+      <label htmlFor="fileInput" className="text-gray-400 hover:text-gray-700 font-bold py-2 px-2 cursor-pointer">
+        <FaUpload />
+      </label>
+      <input type="file" id="fileInput" accept="image/*" onChange={handleFileChange} hidden />
+
+      <button onClick={handleSendMessage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <FaPaperPlane />
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 };
 
