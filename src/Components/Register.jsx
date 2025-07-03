@@ -51,12 +51,12 @@ const Register = () => {
     };
 
     return (
-        <div className="container mx-auto p-4 pt-20">
+        <div className="container mx-auto p-4 pt-24">
             <h1 className="text-4xl font-semibold text-center text-blue-800 mb-8">Register</h1>
             <h2 className="text-2xl text-center mb-4">Create Your New Account</h2>
 
             {loading ? (
-                <div className="flex flex-col justify-center items-center py-12 space-y-4">
+                <div className="flex flex-col justify-center items-center py-12 space-y-4 p-16">
                     <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-gray-700 font-medium mb-16">Registering, please wait...</p>
                 </div>
