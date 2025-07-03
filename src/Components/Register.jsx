@@ -3,15 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { saveToken } from '../Helper/Tokens';
 import Domain from "../constants/Domain";
-import imgDoc from "../assets/img/doc-Reg.jpg";
-import imgUser from "../assets/img/User.jpg";
+
 const Register = () => {
     const [email, setEmail] = useState('');
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [showRoleModal, setShowRoleModal] = useState(false); // 🔹 Role Modal State
+    const [loading, setLoading] = useState(false); // ✅ Add loading state
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -20,6 +19,9 @@ const Register = () => {
             setErrorMessage('Passwords do not match.');
             return;
         }
+
+        setLoading(true); // ✅ Start loading
+
         try {
             const body = {
                 'FullName': fullName,
@@ -36,23 +38,16 @@ const Register = () => {
                 setConfirmPassword("");
                 setFullName("");
                 setErrorMessage('');
-                setShowRoleModal(true); // 🔹 Show role selection modal after registration
+                navigate('/');
+                window.location.reload();
             } else {
                 setErrorMessage('Registration failed. Please try again.');
             }
         } catch (error) {
             setErrorMessage('Registration failed. Please try again.');
         }
-    };
 
-    // 🔹 Handle Role Selection
-    const handleRoleSelect = (role) => {
-        if (role === "doctor") {
-            navigate('/DoctorDetails');
-        } else {
-            navigate('/');
-        }
-        window.location.reload();
+        setLoading(false); // ✅ Stop loading
     };
 
     return (
@@ -60,30 +55,36 @@ const Register = () => {
             <h1 className="text-4xl font-semibold text-center text-blue-800 mb-8">Register</h1>
             <h2 className="text-2xl text-center mb-4">Create Your New Account</h2>
 
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                    <input
-                        type="text"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Full Name"
-                    />
+            {loading ? (
+                <div className="flex flex-col justify-center items-center py-12 space-y-4">
+                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-gray-700 font-medium mb-16">Registering, please wait...</p>
                 </div>
+            ) : (
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                        <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Full Name"
+                        />
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Email"
-                    />
-                </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Email"
+                        />
+                    </div>
 
-                <div className="mb-4">
+                    <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
                     <input
                         type="password"
@@ -92,56 +93,37 @@ const Register = () => {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Password"
                     />
+                    <p className="text-xs text-gray-500 mt-1">
+                        Password must contain at least one 'A,b,#,123' and it must be strong..
+                    </p>
                 </div>
 
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Confirm Password"
-                    />
-                </div>
-
-                {errorMessage && <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>}
-
-                <button
-                    type="submit"
-                    className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-                >
-                    Register
-                </button>
-            </form>
-
-            <p className="text-center">
-                Already have an account? <Link to="/login" className="text-blue-700 hover:underline">Login here</Link>
-            </p>
-
-            {/* 🔹 Role Selection Modal */}
-            {showRoleModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg text-center">
-                        <h2 className="text-xl font-bold mb-4">Register as a</h2>
-                        <div className="flex justify-center gap-6">
-                            <button
-                                onClick={() => handleRoleSelect("doctor")}
-                                className="flex flex-col items-center p-4 border rounded-lg hover:bg-gray-200"
-                            >
-                                <img src={imgDoc} alt="Doctor" className="w-16 h-16 rounded-lg" />
-                                <span className="mt-2">Doctor</span>
-                            </button>
-                            <button
-                                onClick={() => handleRoleSelect("user")}
-                                className="flex flex-col items-center p-4 border rounded-lg hover:bg-gray-200"
-                            >
-                                <img src={imgUser} alt="User" className="w-16 h-16 rounded-lg" />
-                                <span className="mt-2">Patient</span>
-                            </button>
-                        </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Confirm Password"
+                        />
                     </div>
-                </div>
+
+                    {errorMessage && <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>}
+
+                    <button
+                        type="submit"
+                        className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                    >
+                        Register
+                    </button>
+                </form>
+            )}
+
+            {!loading && (
+                <p className="text-center">
+                    Already have an account? <Link to="/login" className="text-blue-700 hover:underline">Login here</Link>
+                </p>
             )}
         </div>
     );
